@@ -1,13 +1,16 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from app.api.routes import auth, users, articles  # comments à ajouter plus tard
+from app.api.routes import auth, users, articles
 from app.db.database import engine, Base
 from app.core.config import settings
 
 app = FastAPI(title="Blog Backend")
 
-# CORS
+# Créer le dossier uploads s'il n'existe pas
+os.makedirs("uploads", exist_ok=True)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[settings.FRONTEND_URL],
@@ -16,13 +19,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Servir les fichiers statiques (images uploadées)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
-# Créer les tables dans la base de données
 Base.metadata.create_all(bind=engine)
 
-# Inclure les routes
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(users.router, prefix="/users", tags=["users"])
 app.include_router(articles.router, prefix="/articles", tags=["articles"])
