@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/* Animation pour le défilement de gauche à droite */
+@keyframes marquee {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Animation pour le changement de couleur */
+@keyframes colorChange {
+  0% {
+    color: #f28c38; /* Orange */
+  }
+  33% {
+    color: #000000; /* Noir */
+  }
+  66% {
+    color: #ffffff; /* Blanc */
+  }
+  100% {
+    color: #f28c38; /* Retour à l'orange */
+  }
+}
+
+/* Classe pour appliquer le défilement */
+.animate-marquee {
+  animation: marquee 15s linear infinite;
+}
+
+/* Classe pour appliquer le changement de couleur */
+.animate-color-change {
+  animation: colorChange 3s infinite;
+}
