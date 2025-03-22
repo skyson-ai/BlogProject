@@ -38,7 +38,13 @@ export default function Navbar() {
           Accueil
         </Link>
         <Link
-          href="/a-propos"
+          href="/blog"
+          className="text-2xl hover:border-b-2 hover:border-orange-500 transition-all duration-200"
+        >
+          Blog
+        </Link>
+        <Link
+          href="/about"
           className="text-2xl hover:border-b-2 hover:border-orange-500 transition-all duration-200"
         >
           À propos

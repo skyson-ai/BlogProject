@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import '../app/globals.css'; // Importation des styles Tailwind
 
 export const metadata: Metadata = {
-  title: 'Voix Indélébiles',
+  title: 'Blog Voix Indélébiles',
   description: 'Un blog pour des voix inoubliables',
 };
 

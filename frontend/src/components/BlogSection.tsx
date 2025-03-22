@@ -13,7 +13,7 @@ const BlogSection = () => {
         {/* Grille d'articles */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Article 1 */}
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
             <Image
               src="/Tech1.jpg"
               alt="Les Chatbots et l’Expérience Client"
@@ -21,19 +21,19 @@ const BlogSection = () => {
               height={250}
               className="w-full h-48 object-cover"
             />
-            <div className="p-6">
+            <div className="p-6 flex flex-col flex-grow">
               <span className="text-blue-600 text-sm font-semibold uppercase">IA</span>
-              <h3 className="text-xl font-bold text-gray-900 mt-2 mb-4">
+              <h3 className="text-xl font-bold text-gray-900 mt-2 mb-4 flex-grow">
                 Les Chatbots et l’Expérience Client dans le Secteur des Services
               </h3>
-              <button className="border border-gray-300 rounded-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors">
+              <button className="border border-gray-300 rounded-full px-6 py-3 text-gray-700 bg-black-600 mt-auto">
                 Lire plus
               </button>
             </div>
           </div>
 
           {/* Article 2 */}
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
             <Image
               src="/tech2.jpg"
               alt="La Réalité Augmentée"
@@ -41,19 +41,19 @@ const BlogSection = () => {
               height={250}
               className="w-full h-48 object-cover"
             />
-            <div className="p-6">
+            <div className="p-6 flex flex-col flex-grow">
               <span className="text-blue-600 text-sm font-semibold uppercase">Technologie</span>
-              <h3 className="text-xl font-bold text-gray-900 mt-2 mb-4">
+              <h3 className="text-xl font-bold text-gray-900 mt-2 mb-4 flex-grow">
                 La Réalité Augmentée : Son Évolution et Ses Applications Actuelles
               </h3>
-              <button className="border border-gray-300 rounded-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors">
+              <button className="border border-gray-300 rounded-full px-6 py-3 text-gray-700 bg-black-600 mt-auto">
                 Lire plus
               </button>
             </div>
           </div>
 
           {/* Article 3 */}
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
             <Image
               src="/tech3.jpg"
               alt="Optimisez Votre Temps"
@@ -61,16 +61,23 @@ const BlogSection = () => {
               height={250}
               className="w-full h-48 object-cover"
             />
-            <div className="p-6">
+            <div className="p-6 flex flex-col flex-grow">
               <span className="text-blue-600 text-sm font-semibold uppercase">Technologie</span>
-              <h3 className="text-xl font-bold text-gray-900 mt-2 mb-4">
+              <h3 className="text-xl font-bold text-gray-900 mt-2 mb-4 flex-grow">
                 Optimisez Votre Temps avec les Outils du Numérique
               </h3>
-              <button className="border border-gray-300 rounded-full px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors">
+              <button className="border border-gray-300 rounded-full px-6 py-3 text-gray-700 bg-black-600 mt-auto">
                 Lire plus
               </button>
             </div>
           </div>
+        </div>
+
+        {/* Bouton "Lire plus" centré en bas */}
+        <div className="flex justify-center mt-12">
+          <button className="border border-gray-300 rounded-full px-6 py-3 text-gray-700 bg-black-600">
+            Lire plus
+          </button>
         </div>
       </div>
     </section>

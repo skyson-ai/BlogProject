@@ -3,6 +3,7 @@ import Hero from '../components/Hero';
 import ContactForm from '../components/ContactForm';
 import SubHeader from '../components/SubHeader';
 import BlogSection from '../components/BlogSection';
+import Footer from '../components/Footer';
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
         <ContactForm />
         <BlogSection />
       </main>
+      <Footer />
     </div>
   );
 }
