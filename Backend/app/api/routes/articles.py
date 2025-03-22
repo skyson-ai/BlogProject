@@ -22,6 +22,9 @@ async def create_article(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
+    if current_user.role != "admin":  # Vérification du rôle
+        raise HTTPException(status_code=403, detail="Non autorisé")
+    
     image_filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{image.filename}"
     image_path = os.path.join("uploads", image_filename)
     os.makedirs("uploads", exist_ok=True)  # Créer le dossier si nécessaire
@@ -54,8 +57,9 @@ async def update_article(
     article = db.query(Article).filter(Article.id == id).first()
     if not article:
         raise HTTPException(status_code=404, detail="Article non trouvé")
-    if article.author_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Non autorisé")
+    
+    if current_user.role != "admin":  # Vérification du rôle
+        raise HTTPException(status_code=403, detail="Non Autorisé")
 
     article.title = title
     article.content = content
@@ -86,7 +90,7 @@ def delete_article(
     article = db.query(Article).filter(Article.id == id).first()
     if not article:
         raise HTTPException(status_code=404, detail="Article non trouvé")
-    if article.author_id != current_user.id:
+    if current_user.role != "admin":  # Vérification du rôle
         raise HTTPException(status_code=403, detail="Non autorisé")
 
     if article.image_url:

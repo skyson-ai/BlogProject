@@ -15,7 +15,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     if db.query(User).filter(User.username == user.username).first():
         raise HTTPException(status_code=400, detail="Utilisateur existe déjà")
     hashed_password = get_password_hash(user.password)
-    db_user = User(username=user.username, hashed_password=hashed_password)
+    db_user = User(username=user.username, hashed_password=hashed_password, role="admin")  
     db.add(db_user)
     db.commit()
     return {"message": "Utilisateur créé", "username": user.username}
