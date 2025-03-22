@@ -217,7 +217,7 @@ export default function AdminDashboard() {
                     </p>
                     {article.image_url && (
                       <img
-                        src={`http://localhost:8000${article.image_url}`}
+                        src={`http://localhost:8001${article.image_url}`}
                         alt={article.title}
                         className="w-32 h-32 object-cover mt-2"
                       />

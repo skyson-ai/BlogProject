@@ -22,19 +22,19 @@ async def create_article(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    if current_user.role != "admin":  # Vérification du rôle
+    if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Non autorisé")
     
     image_filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{image.filename}"
     image_path = os.path.join("uploads", image_filename)
-    os.makedirs("uploads", exist_ok=True)  # Créer le dossier si nécessaire
+    os.makedirs("uploads", exist_ok=True)
     with open(image_path, "wb") as f:
-        content = await image.read()
-        f.write(content)
+        image_data = await image.read()
+        f.write(image_data)
 
     article = Article(
         title=title,
-        content=content,
+        content=content,  
         category=category,
         image_url=f"/uploads/{image_filename}",
         author_id=current_user.id
@@ -57,12 +57,11 @@ async def update_article(
     article = db.query(Article).filter(Article.id == id).first()
     if not article:
         raise HTTPException(status_code=404, detail="Article non trouvé")
-    
-    if current_user.role != "admin":  # Vérification du rôle
-        raise HTTPException(status_code=403, detail="Non Autorisé")
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Non autorisé")
 
     article.title = title
-    article.content = content
+    article.content = content  
     article.category = category
 
     if image:
@@ -73,8 +72,8 @@ async def update_article(
         image_filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{image.filename}"
         image_path = os.path.join("uploads", image_filename)
         with open(image_path, "wb") as f:
-            content = await image.read()
-            f.write(content)
+            image_data = await image.read()  
+            f.write(image_data)
         article.image_url = f"/uploads/{image_filename}"
 
     db.commit()
