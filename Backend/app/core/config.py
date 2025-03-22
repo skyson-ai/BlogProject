@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  # Charge les variables d'environnement depuis .env
+load_dotenv()
 
 class Settings:
     DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://blog_user:L270127N@localhost:5432/blog_db?client_encoding=utf8")
