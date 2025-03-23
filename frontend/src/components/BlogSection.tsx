@@ -12,7 +12,13 @@ const BlogSection = () => {
     const fetchArticles = async () => {
       try {
         const res = await api.get('/articles');
-        setArticles(res.data);
+        // Trier les articles par date de création (du plus récent au plus ancien)
+        const sortedArticles = res.data.sort((a: any, b: any) => 
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        // Limiter à 3 articles
+        const latestArticles = sortedArticles.slice(0, 3);
+        setArticles(latestArticles);
       } catch (err) {
         setError('Erreur lors de la récupération des articles');
       }
@@ -42,15 +48,14 @@ const BlogSection = () => {
                   />
                 )}
                 {/* Contenu de la carte */}
-                <div className="p-6 flex flex-col h-[200px]"> {/* Ajout de flex-col et hauteur fixe */}
+                <div className="p-6 flex flex-col h-[200px]">
                   {/* Catégorie avec carré orange */}
                   <div className="flex items-center mb-2">
                     <span className="w-4 h-4 bg-orange-500 mr-2"></span>
-                    <p className="text-gray-700 fo
-                    nt-semibold">{article.category}</p>
+                    <p className="text-gray-700 font-semibold">{article.category}</p>
                   </div>
                   {/* Titre souligné */}
-                  <h3 className="text-xl font-semibold mb-2  border-black">
+                  <h3 className="text-xl font-semibold mb-2 border-black">
                     {article.title}
                   </h3>
                   {/* Espace flexible pour pousser le bouton en bas */}

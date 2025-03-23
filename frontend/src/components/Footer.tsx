@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FaFacebookF, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6'; // Icône pour X (Twitter)
 
 const Footer = () => {
@@ -11,7 +11,7 @@ const Footer = () => {
           {/* Logo */}
           <div className="mb-4 md:mb-0">
             <h2 className="text-3xl font-bold">
-              Legouan <span className="text-blue-600">Eric</span>
+              Voix <span className="text-blue-600">Indélébiles</span>
             </h2>
           </div>
 
@@ -21,16 +21,13 @@ const Footer = () => {
             Rigoparis796@gmail.com
             </a>
             <div className="flex space-x-4">
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                <FaLinkedinIn className="text-2xl hover:text-gray-300" />
-              </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <a href="https://www.facebook.com/share/1A2cJ8RmCA/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                 <FaFacebookF className="text-2xl hover:text-gray-300" />
               </a>
-              <a href="https://x.com" target="_blank" rel="noopener noreferrer" aria-label="X">
+              <a href="https://x.com/VoixIndelebiles?t=aqNkRwTfZIA_7CUv-1bzjQ&s=09" target="_blank" rel="noopener noreferrer" aria-label="X">
                 <FaXTwitter className="text-2xl hover:text-gray-300" />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <a href="https://www.instagram.com/voix_indelebiles/profilecard/?igsh=MTY2dWcybDg0Nmt5eA==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <FaInstagram className="text-2xl hover:text-gray-300" />
               </a>
             </div>
