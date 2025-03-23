@@ -28,6 +28,22 @@ export default function BlogPage() {
     fetchArticles();
   }, []);
 
+  // Déterminer les classes de la grille en fonction du nombre d'articles
+  const getGridClasses = () => {
+    const articleCount = articles.length;
+
+    if (articleCount <= 3) {
+      // Si 3 articles ou moins, afficher tous sur une seule ligne
+      return 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8';
+    } else if (articleCount === 4) {
+      // Si 4 articles, afficher 2 par ligne (2 lignes de 2)
+      return 'grid grid-cols-1 sm:grid-cols-2 gap-8';
+    } else {
+      // Si 5 articles ou plus, afficher 3 par ligne
+      return 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8';
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -42,7 +58,7 @@ export default function BlogPage() {
           {articles.length === 0 ? (
             <p className="text-gray-600 text-center">Aucun article pour le moment.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className={getGridClasses()}>
               {articles.map((article) => (
                 <div key={article.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
                   {/* Image */}
