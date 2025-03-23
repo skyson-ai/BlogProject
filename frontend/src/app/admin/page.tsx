@@ -6,6 +6,7 @@ import api from './../../lib/api';
 
 export default function AdminDashboard() {
   const [articles, setArticles] = useState<any[]>([]);
+  const [messages, setMessages] = useState<any[]>([]); // Nouvel état pour les messages
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
@@ -21,6 +22,7 @@ export default function AdminDashboard() {
       router.push('/admin/login');
     } else {
       fetchArticles();
+      fetchMessages(); // Récupérer les messages au chargement
     }
   }, [router]);
 
@@ -30,6 +32,15 @@ export default function AdminDashboard() {
       setArticles(res.data);
     } catch (err) {
       setError('Erreur lors de la récupération des articles');
+    }
+  };
+
+  const fetchMessages = async () => {
+    try {
+      const res = await api.get('/api/contact');
+      setMessages(res.data);
+    } catch (err) {
+      setError('Erreur lors de la récupération des messages de contact');
     }
   };
 
@@ -47,7 +58,6 @@ export default function AdminDashboard() {
 
     try {
       if (editingId) {
-        // Modifier un article
         const res = await api.put(`/articles/${editingId}`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -56,7 +66,6 @@ export default function AdminDashboard() {
         setArticles(articles.map((article) => (article.id === editingId ? res.data : article)));
         setEditingId(null);
       } else {
-        // Créer un article
         const res = await api.post('/articles', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -79,7 +88,7 @@ export default function AdminDashboard() {
     setTitle(article.title);
     setContent(article.content);
     setCategory(article.category);
-    setAuthor(article.author_id.toString()); // On ne modifie pas l'image ici
+    setAuthor(article.author_id.toString());
   };
 
   const handleDelete = async (id: string) => {
@@ -169,7 +178,7 @@ export default function AdminDashboard() {
                 }}
                 className="w-full p-2 border rounded-lg"
                 accept="image/*"
-                required={!editingId} // Image requise pour la création, optionnelle pour la modification
+                required={!editingId}
               />
             </div>
             <button
@@ -198,7 +207,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Liste des articles */}
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+        <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
           <h2 className="text-2xl font-semibold mb-4">Articles publiés</h2>
           {articles.length === 0 ? (
             <p className="text-gray-600">Aucun article pour le moment.</p>
@@ -217,7 +226,7 @@ export default function AdminDashboard() {
                     </p>
                     {article.image_url && (
                       <img
-                        src={`http://localhost:8001${article.image_url}`}
+                        src={`${process.env.NEXT_PUBLIC_API_URL}${article.image_url}`}
                         alt={article.title}
                         className="w-32 h-32 object-cover mt-2"
                       />
@@ -237,6 +246,33 @@ export default function AdminDashboard() {
                       Supprimer
                     </button>
                   </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Liste des messages de contact */}
+        <div className="bg-white p-6 rounded-lg shadow-lg">
+          <h2 className="text-2xl font-semibold mb-4">Messages de contact</h2>
+          {messages.length === 0 ? (
+            <p className="text-gray-600">Aucun message pour le moment.</p>
+          ) : (
+            <div className="space-y-4">
+              {messages.map((message) => (
+                <div key={message.id} className="border-b pb-4">
+                  <p className="text-gray-700">
+                    <span className="font-semibold">Nom :</span> {message.name}
+                  </p>
+                  <p className="text-gray-700">
+                    <span className="font-semibold">Email :</span> {message.email}
+                  </p>
+                  <p className="text-gray-700">
+                    <span className="font-semibold">Message :</span> {message.message}
+                  </p>
+                  <p className="text-gray-500 text-sm">
+                    Envoyé le : {new Date(message.created_at).toLocaleDateString()}
+                  </p>
                 </div>
               ))}
             </div>

@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from app.api.routes import auth, users, articles
 from app.db.database import engine, Base
 from app.core.config import settings
+from app.api.routes import contact
 
 app = FastAPI(title="Blog Backend")
 
@@ -26,6 +27,7 @@ Base.metadata.create_all(bind=engine)
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(users.router, prefix="/users", tags=["users"])
 app.include_router(articles.router, prefix="/articles", tags=["articles"])
+app.include_router(contact.router, prefix="/api", tags=["contact"])
 
 @app.get("/")
 def read_root():

@@ -23,3 +23,13 @@ class Article(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     author_id = Column(Integer, ForeignKey("users.id"))
     author = relationship("User", back_populates="articles")
+    
+# Nouveau modèle pour ContactMessage
+class ContactMessage(Base):
+    __tablename__ = "contact_messages"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    email = Column(String, index=True)
+    message = Column(String)
+    created_at = Column(DateTime, default=datetime.utcnow)
