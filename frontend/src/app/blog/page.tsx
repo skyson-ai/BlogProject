@@ -52,7 +52,7 @@ export default function BlogPage() {
       <section className="py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-5xl font-bold text-center mb-12">
-            Tous les Articles <span className="text-orange-600">.</span>
+            Blog <span className="text-orange-600">.</span>
           </h2>
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
           {articles.length === 0 ? (
