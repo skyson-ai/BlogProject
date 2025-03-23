@@ -21,13 +21,10 @@ const Hero = () => {
             {/* Texte */}
             <div className="text-left">
               <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-             Legouan <span className="text-blue-600">Eric</span>
+             Legouan <span className="text-blue-600">Kouassi</span>
               </h2>
               <p className="text-gray-700 text-lg leading-relaxed">
-                Ivoirienne engagée et leader dans le domaine des médias numériques, Edith Brou Bleu a
-                dirigé les agences de communication digitales People Input Côte d'Ivoire [2012 - 2016]
-                et ACG entreprises [2017 - 2019]. Ces expériences renforcent sa stature en tant que
-                professionnelle accomplie avec plus de 15 ans d’expérience.
+              Passionné d’écriture, de technologie et de justice sociale. À travers son blog Voix Indélébiles, il informe et sensibilise sur les droits des enfants, des femmes et les injustices sociales. Engagé dans le programme des Jeunes Blogueurs de l’UNICEF, il croit au pouvoir des mots pour faire évoluer les mentalités.
               </p>
             </div>
           </div>

@@ -20,7 +20,7 @@ export default function AboutPage() {
             <div>
               <h2 className="text-3xl font-semibold text-gray-900 mb-4">Qui suis-je ?</h2>
               <p className="text-lg text-gray-600 leading-relaxed">
-                Je me nomme Kouassi Legouan , un jeune passionné par la technologie, la lecture et l’écriture. Curieux et engagé, j’ai toujours été fasciné par le pouvoir des mots et leur capacité à informer, sensibiliser et éveiller les consciences.
+                Je me nomme Legouan Kouassi, un jeune passionné par la technologie, la lecture et l’écriture. Curieux et engagé, j’ai toujours été fasciné par le pouvoir des mots et leur capacité à informer, sensibiliser et éveiller les consciences.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed mt-4">
                 Aujourd’hui, je fais partie du programme des Jeunes Blogueurs, une initiative en partenariat avec l’UNICEF, qui vise à promouvoir les droits humains, notamment ceux des enfants et des femmes, à travers le numérique et l’expression écrite.

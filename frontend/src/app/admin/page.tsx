@@ -101,7 +101,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // Nouvelle fonction pour supprimer un message
   const handleDeleteMessage = async (id: number) => {
     try {
       await api.delete(`/api/contact/${id}`);
@@ -228,9 +227,9 @@ export default function AdminDashboard() {
               {articles.map((article) => (
                 <div
                   key={article.id}
-                  className="border-b pb-4 flex justify-between items-center"
+                  className="border-b pb-4 flex flex-col md:flex-row md:justify-between md:items-center"
                 >
-                  <div>
+                  <div className="mb-4 md:mb-0">
                     <h3 className="text-xl font-semibold">{article.title}</h3>
                     <p className="text-gray-600">{article.category}</p>
                     <p className="text-gray-500 text-sm">
@@ -244,7 +243,7 @@ export default function AdminDashboard() {
                       />
                     )}
                   </div>
-                  <div className="space-x-2">
+                  <div className="flex space-x-2">
                     <button
                       onClick={() => handleEdit(article)}
                       className="bg-yellow-600 text-white px-3 py-1 rounded-lg hover:bg-yellow-700"
@@ -274,9 +273,9 @@ export default function AdminDashboard() {
               {messages.map((message) => (
                 <div
                   key={message.id}
-                  className="border-b pb-4 flex justify-between items-center"
+                  className="border-b pb-4 flex flex-col md:flex-row md:justify-between md:items-center"
                 >
-                  <div>
+                  <div className="mb-4 md:mb-0">
                     <p className="text-gray-700">
                       <span className="font-semibold">Nom :</span> {message.name}
                     </p>
@@ -290,12 +289,14 @@ export default function AdminDashboard() {
                       Envoyé le : {new Date(message.created_at).toLocaleDateString()}
                     </p>
                   </div>
-                  <button
-                    onClick={() => handleDeleteMessage(message.id)}
-                    className="bg-red-600 text-white px-3 py-1 rounded-lg hover:bg-red-700"
-                  >
-                    Supprimer
-                  </button>
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handleDeleteMessage(message.id)}
+                      className="bg-red-600 text-white px-3 py-1 rounded-lg hover:bg-red-700"
+                    >
+                      Supprimer
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
