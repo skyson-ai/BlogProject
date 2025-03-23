@@ -51,3 +51,15 @@ def get_contact_messages(db: Session = Depends(get_db), current_user: User = Dep
         }
         for message in messages
     ]
+    
+  # Route pour supprimer un message
+@router.delete("/contact/{id}")
+def delete_contact_message(id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Non autorisé")
+    message = db.query(ContactMessage).filter(ContactMessage.id == id).first()
+    if not message:
+        raise HTTPException(status_code=404, detail="Message non trouvé")
+    db.delete(message)
+    db.commit()
+    return {"message": "Message supprimé avec succès"}

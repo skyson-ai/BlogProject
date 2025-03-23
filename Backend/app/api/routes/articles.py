@@ -9,10 +9,20 @@ from app.db.schemas import Article as ArticleSchema
 
 router = APIRouter()
 
+# Route pour récupérer tous les articles
 @router.get("/", response_model=list[ArticleSchema])
 def get_articles(db: Session = Depends(get_db)):
     return db.query(Article).all()
 
+# Route pour récupérer un article spécifique par son ID
+@router.get("/{id}", response_model=ArticleSchema)
+def get_article(id: int, db: Session = Depends(get_db)):
+    article = db.query(Article).filter(Article.id == id).first()
+    if not article:
+        raise HTTPException(status_code=404, detail="Article non trouvé")
+    return article
+
+# Route pour créer un article
 @router.post("/", response_model=ArticleSchema)
 async def create_article(
     title: str = Form(...),
@@ -44,6 +54,7 @@ async def create_article(
     db.refresh(article)
     return article
 
+# Route pour mettre à jour un article
 @router.put("/{id}", response_model=ArticleSchema)
 async def update_article(
     id: int,
@@ -80,6 +91,7 @@ async def update_article(
     db.refresh(article)
     return article
 
+# Route pour supprimer un article
 @router.delete("/{id}")
 def delete_article(
     id: int,
@@ -89,7 +101,7 @@ def delete_article(
     article = db.query(Article).filter(Article.id == id).first()
     if not article:
         raise HTTPException(status_code=404, detail="Article non trouvé")
-    if current_user.role != "admin":  # Vérification du rôle
+    if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Non autorisé")
 
     if article.image_url:

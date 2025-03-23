@@ -6,7 +6,7 @@ import api from './../../lib/api';
 
 export default function AdminDashboard() {
   const [articles, setArticles] = useState<any[]>([]);
-  const [messages, setMessages] = useState<any[]>([]); // Nouvel état pour les messages
+  const [messages, setMessages] = useState<any[]>([]);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
@@ -22,7 +22,7 @@ export default function AdminDashboard() {
       router.push('/admin/login');
     } else {
       fetchArticles();
-      fetchMessages(); // Récupérer les messages au chargement
+      fetchMessages();
     }
   }, [router]);
 
@@ -39,7 +39,8 @@ export default function AdminDashboard() {
     try {
       const res = await api.get('/api/contact');
       setMessages(res.data);
-    } catch (err) {
+    } catch (err: any) {
+      console.error('Erreur lors de la récupération des messages:', err.response?.data || err.message);
       setError('Erreur lors de la récupération des messages de contact');
     }
   };
@@ -97,6 +98,17 @@ export default function AdminDashboard() {
       setArticles(articles.filter((article) => article.id !== id));
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Erreur lors de la suppression');
+    }
+  };
+
+  // Nouvelle fonction pour supprimer un message
+  const handleDeleteMessage = async (id: number) => {
+    try {
+      await api.delete(`/api/contact/${id}`);
+      setMessages(messages.filter((message) => message.id !== id));
+      setError(''); // Réinitialiser l'erreur après une suppression réussie
+    } catch (err: any) {
+      setError(err.response?.data?.detail || 'Erreur lors de la suppression du message');
     }
   };
 
@@ -260,19 +272,30 @@ export default function AdminDashboard() {
           ) : (
             <div className="space-y-4">
               {messages.map((message) => (
-                <div key={message.id} className="border-b pb-4">
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Nom :</span> {message.name}
-                  </p>
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Email :</span> {message.email}
-                  </p>
-                  <p className="text-gray-700">
-                    <span className="font-semibold">Message :</span> {message.message}
-                  </p>
-                  <p className="text-gray-500 text-sm">
-                    Envoyé le : {new Date(message.created_at).toLocaleDateString()}
-                  </p>
+                <div
+                  key={message.id}
+                  className="border-b pb-4 flex justify-between items-center"
+                >
+                  <div>
+                    <p className="text-gray-700">
+                      <span className="font-semibold">Nom :</span> {message.name}
+                    </p>
+                    <p className="text-gray-700">
+                      <span className="font-semibold">Email :</span> {message.email}
+                    </p>
+                    <p className="text-gray-700">
+                      <span className="font-semibold">Message :</span> {message.message}
+                    </p>
+                    <p className="text-gray-500 text-sm">
+                      Envoyé le : {new Date(message.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleDeleteMessage(message.id)}
+                    className="bg-red-600 text-white px-3 py-1 rounded-lg hover:bg-red-700"
+                  >
+                    Supprimer
+                  </button>
                 </div>
               ))}
             </div>
