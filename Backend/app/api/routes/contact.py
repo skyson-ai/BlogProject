@@ -23,7 +23,7 @@ class ContactMessageResponse(BaseModel):
     created_at: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Route pour enregistrer un message
 @router.post("/contact")
