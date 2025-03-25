@@ -3,8 +3,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from app.core.config import settings
 
-# Remplace 'psycopg2' par 'psycopg' dans l'URL
-DATABASE_URL = settings.DATABASE_URL.replace("postgresql+psycopg2://", "postgresql+psycopg://")
+DATABASE_URL = settings.DATABASE_URL
+if "psycopg2" in DATABASE_URL:
+    DATABASE_URL = DATABASE_URL.replace("postgresql+psycopg2://", "postgresql+psycopg://")
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
