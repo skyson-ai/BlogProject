@@ -6,6 +6,7 @@ from app.db.database import get_db
 from app.api.dependencies import get_current_user
 from app.db.models import Article, User
 from app.db.schemas import Article as ArticleSchema
+from typing import List
 
 router = APIRouter()
 
@@ -22,31 +23,44 @@ def get_article(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Article non trouvé")
     return article
 
-# Route pour créer un article
+# Route pour créer un article avec plusieurs images
 @router.post("/", response_model=ArticleSchema)
 async def create_article(
     title: str = Form(...),
     content: str = Form(...),
     category: str = Form(...),
-    image: UploadFile = File(...),
+    images: List[UploadFile] = File([]),  # Accepte plusieurs fichiers
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Non autorisé")
-    
-    image_filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{image.filename}"
-    image_path = os.path.join("uploads", image_filename)
-    os.makedirs("uploads", exist_ok=True)
-    with open(image_path, "wb") as f:
-        image_data = await image.read()
-        f.write(image_data)
+
+    # Sauvegarder les images uploadées
+    image_urls = []
+    for image in images:
+        image_filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{image.filename}"
+        image_path = os.path.join("uploads", image_filename)
+        os.makedirs("uploads", exist_ok=True)
+        with open(image_path, "wb") as f:
+            image_data = await image.read()
+            f.write(image_data)
+        image_urls.append(f"/uploads/{image_filename}")
+
+    # Intégrer les URLs des images dans le contenu
+    updated_content = content
+    for i, url in enumerate(image_urls, 1):
+        placeholder = f"[image{i}]"  # Placeholder dans le contenu, par ex. "[image1]"
+        updated_content = updated_content.replace(placeholder, f"![Image]({url})")  # Format Markdown
+
+    # Si aucune image n’est uploadée, la première sera dans image_url
+    primary_image_url = image_urls[0] if image_urls else None
 
     article = Article(
         title=title,
-        content=content,  
+        content=updated_content,  
         category=category,
-        image_url=f"/uploads/{image_filename}",
+        image_url=primary_image_url,  # Garde la première image comme image principale
         author_id=current_user.id
     )
     db.add(article)
@@ -61,7 +75,7 @@ async def update_article(
     title: str = Form(...),
     content: str = Form(...),
     category: str = Form(...),
-    image: UploadFile = File(None),
+    images: List[UploadFile] = File([]),  # Accepte plusieurs fichiers
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -71,21 +85,37 @@ async def update_article(
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Non autorisé")
 
-    article.title = title
-    article.content = content  
-    article.category = category
+    # Supprimer l’ancienne image principale si elle existe et n’est pas réutilisée
+    old_image_urls = [article.image_url] if article.image_url else []
+    new_image_urls = []
 
-    if image:
-        if article.image_url:
-            old_image_path = article.image_url.replace("/uploads/", "uploads/")
-            if os.path.exists(old_image_path):
-                os.remove(old_image_path)
+    # Sauvegarder les nouvelles images uploadées
+    for image in images:
         image_filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{image.filename}"
         image_path = os.path.join("uploads", image_filename)
         with open(image_path, "wb") as f:
-            image_data = await image.read()  
+            image_data = await image.read()
             f.write(image_data)
-        article.image_url = f"/uploads/{image_filename}"
+        new_image_urls.append(f"/uploads/{image_filename}")
+
+    # Intégrer les URLs des images dans le contenu
+    updated_content = content
+    for i, url in enumerate(new_image_urls, 1):
+        placeholder = f"[image{i}]"
+        updated_content = updated_content.replace(placeholder, f"![Image]({url})")
+
+    # Mettre à jour les champs
+    article.title = title
+    article.content = updated_content
+    article.category = category
+    article.image_url = new_image_urls[0] if new_image_urls else article.image_url
+
+    # Supprimer les anciennes images qui ne sont plus utilisées
+    for old_url in old_image_urls:
+        if old_url and old_url not in updated_content and old_url != article.image_url:
+            old_image_path = old_url.replace("/uploads/", "uploads/")
+            if os.path.exists(old_image_path):
+                os.remove(old_image_path)
 
     db.commit()
     db.refresh(article)
@@ -104,8 +134,16 @@ def delete_article(
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Non autorisé")
 
+    # Supprimer les images associées dans content et image_url
     if article.image_url:
         image_path = article.image_url.replace("/uploads/", "uploads/")
+        if os.path.exists(image_path):
+            os.remove(image_path)
+    # Recherche des URLs d’images dans le contenu (simplifié ici)
+    import re
+    image_urls = re.findall(r"!\[Image\]\((/uploads/[^)]+)\)", article.content)
+    for url in image_urls:
+        image_path = url.replace("/uploads/", "uploads/")
         if os.path.exists(image_path):
             os.remove(image_path)
 
