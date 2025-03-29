@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import api from '../../../lib/api'; // Utilisation d'un chemin absolu (à configurer si nécessaire)
+import api from '../../../lib/api'; 
 
 export default function AdminLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState(''); // Ajout pour confirmation
+  const [confirmPassword, setConfirmPassword] = useState(''); 
   const [isRegistering, setIsRegistering] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
@@ -16,7 +16,7 @@ export default function AdminLogin() {
     e.preventDefault();
     setError('');
 
-    // Validation du mot de passe (uniquement en mode inscription)
+ 
     if (isRegistering) {
       if (password.length < 8) {
         setError('Le mot de passe doit contenir au moins 8 caractères');
@@ -67,7 +67,7 @@ export default function AdminLogin() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-3xl font-bold text-center mb-6">
-          {isRegistering ? 'Inscription Admin' : 'Connexion Admin'}
+          {isRegistering ? 'Inscription' : 'Connexion'}
         </h1>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
