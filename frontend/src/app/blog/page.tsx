@@ -16,11 +16,10 @@ export default function BlogPage() {
     const fetchArticles = async () => {
       try {
         const res = await api.get('/articles');
-        // Trier les articles par date de création (du plus récent au plus ancien)
         const sortedArticles = res.data.sort((a: any, b: any) => 
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
-        setArticles(sortedArticles); // Afficher tous les articles
+        setArticles(sortedArticles); 
       } catch (err) {
         setError('Erreur lors de la récupération des articles');
       }
