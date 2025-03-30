@@ -8,10 +8,12 @@ export default function AdminDashboard() {
   const [articles, setArticles] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
   const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
   const [category, setCategory] = useState('');
-  const [sections, setSections] = useState([{ content: '', files: [] as File[] }]);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [error, setError] = useState<string>(''); // Typage explicite comme string
+  const [image, setImage] = useState<File | null>(null);
+  const [author, setAuthor] = useState('');
+  const [editingId, setEditingId] = useState(null);
+  const [error, setError] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export default function AdminDashboard() {
     try {
       const res = await api.get('/articles');
       setArticles(res.data);
-    } catch (err: any) {
+    } catch (err) {
       setError('Erreur lors de la récupération des articles');
     }
   };
@@ -43,108 +45,51 @@ export default function AdminDashboard() {
     }
   };
 
-  const addSection = () => {
-    setSections([...sections, { content: '', files: [] }]);
-  };
-
-  const updateSection = (index: number, field: 'content' | 'files', value: string | File[]) => {
-    const newSections = [...sections];
-    if (field === 'content' && typeof value === 'string') {
-      newSections[index][field] = value;
-    } else if (field === 'files' && Array.isArray(value)) {
-      newSections[index][field] = value;
-    }
-    setSections(newSections);
-  };
-
-  const removeSection = (index: number) => {
-    setSections(sections.filter((_, i) => i !== index));
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    // Validation des champs obligatoires
-    if (!title.trim()) {
-      setError('Le titre est obligatoire');
-      return;
-    }
-    if (!category.trim()) {
-      setError('La catégorie est obligatoire');
-      return;
-    }
-    if (sections.length === 0) {
-      setError('Au moins une section est requise');
-      return;
-    }
-    const isInvalidSection = sections.some((section) =>
-      !section.content.trim() || (!editingId && section.files.length === 0)
-    );
-    if (isInvalidSection) {
-      setError('Chaque section doit avoir un contenu et, pour une création, au moins une photo');
-      return;
-    }
-
-    // Construction du FormData
     const formData = new FormData();
     formData.append('title', title);
+    formData.append('content', content);
     formData.append('category', category);
-
-    sections.forEach((section, index) => {
-      formData.append(`sections_content[${index}]`, section.content);
-      section.files.forEach((file, fileIndex) => {
-        formData.append('files', file);
-        console.log(`Fichier ajouté pour section ${index}, fichier ${fileIndex}:`, file.name);
-      });
-    });
-
-    // Log pour vérifier le contenu du FormData
-    console.log('Données envoyées :');
-    console.log('title:', title);
-    console.log('category:', category);
-    console.log('sections:', sections);
-    const formDataEntries = Array.from(formData.entries());
-    console.log('FormData entries:', formDataEntries);
+    if (image) {
+      formData.append('image', image);
+    }
 
     try {
       if (editingId) {
         const res = await api.put(`/articles/${editingId}`, formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         });
         setArticles(articles.map((article) => (article.id === editingId ? res.data : article)));
         setEditingId(null);
       } else {
         const res = await api.post('/articles', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         });
         setArticles([res.data, ...articles]);
       }
       setTitle('');
+      setContent('');
       setCategory('');
-      setSections([{ content: '', files: [] }]);
+      setImage(null);
+      setAuthor('');
     } catch (err: any) {
-      const errorDetail = err.response?.data?.detail;
-      if (Array.isArray(errorDetail)) {
-        const errorMessages = errorDetail.map((e: any) => e.msg).join(', ');
-        setError(errorMessages || 'Erreur lors de la création/modification');
-      } else {
-        setError(errorDetail || 'Erreur lors de la création/modification');
-      }
-      console.error('Erreur complète :', err.response?.data || err.message);
+      setError(err.response?.data?.detail || 'Erreur lors de la création/modification');
     }
   };
 
   const handleEdit = (article: any) => {
     setEditingId(article.id);
     setTitle(article.title);
+    setContent(article.content);
     setCategory(article.category);
-    setSections(
-      article.sections.map((section: any) => ({
-        content: section.content,
-        files: [],
-      }))
-    );
+    setAuthor(article.author_id.toString());
   };
 
   const handleDelete = async (id: string) => {
@@ -160,7 +105,7 @@ export default function AdminDashboard() {
     try {
       await api.delete(`/api/contact/${id}`);
       setMessages(messages.filter((message) => message.id !== id));
-      setError('');
+      setError(''); // Réinitialiser l'erreur après une suppression réussie
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Erreur lors de la suppression du message');
     }
@@ -205,6 +150,19 @@ export default function AdminDashboard() {
               />
             </div>
             <div>
+              <label htmlFor="content" className="block text-gray-700">
+                Contenu
+              </label>
+              <textarea
+                id="content"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="w-full p-2 border rounded-lg"
+                rows={5}
+                required
+              />
+            </div>
+            <div>
               <label htmlFor="category" className="block text-gray-700">
                 Catégorie
               </label>
@@ -217,63 +175,23 @@ export default function AdminDashboard() {
                 required
               />
             </div>
-
-            {/* Sections dynamiques */}
             <div>
-              <h3 className="text-lg font-semibold mb-2">Sections</h3>
-              {sections.map((section, index) => (
-                <div key={index} className="border p-4 mb-4 rounded-lg">
-                  <div>
-                    <label className="block text-gray-700">Contenu de la section</label>
-                    <textarea
-                      value={section.content}
-                      onChange={(e) => updateSection(index, 'content', e.target.value)}
-                      className="w-full p-2 border rounded-lg"
-                      rows={3}
-                      required
-                    />
-                  </div>
-                  <div className="mt-2">
-                    <label className="block text-gray-700">Photos (1 ou 2)</label>
-                    <input
-                      type="file"
-                      multiple
-                      onChange={(e) => {
-                        if (e.target.files) {
-                          const filesArray = Array.from(e.target.files).slice(0, 2);
-                          updateSection(index, 'files', filesArray);
-                        }
-                      }}
-                      className="w-full p-2 border rounded-lg"
-                      accept="image/*"
-                      required={!editingId} // Obligatoire seulement pour création
-                    />
-                    {section.files.length > 0 && (
-                      <p className="text-sm text-gray-600">
-                        Fichiers sélectionnés : {section.files.map((f: File) => f.name).join(', ')}
-                      </p>
-                    )}
-                  </div>
-                  {sections.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeSection(index)}
-                      className="mt-2 text-red-600 hover:underline"
-                    >
-                      Supprimer cette section
-                    </button>
-                  )}
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={addSection}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
-              >
-                Ajouter une section
-              </button>
+              <label htmlFor="image" className="block text-gray-700">
+                Image
+              </label>
+              <input
+                type="file"
+                id="image"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    setImage(e.target.files[0]);
+                  }
+                }}
+                className="w-full p-2 border rounded-lg"
+                accept="image/*"
+                required={!editingId}
+              />
             </div>
-
             <button
               type="submit"
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
@@ -286,8 +204,10 @@ export default function AdminDashboard() {
                 onClick={() => {
                   setEditingId(null);
                   setTitle('');
+                  setContent('');
                   setCategory('');
-                  setSections([{ content: '', files: [] }]);
+                  setImage(null);
+                  setAuthor('');
                 }}
                 className="ml-4 bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
               >
@@ -315,25 +235,13 @@ export default function AdminDashboard() {
                     <p className="text-gray-500 text-sm">
                       Créé le : {new Date(article.created_at).toLocaleDateString()}
                     </p>
-                    {article.sections.map((section: any, index: number) => (
-                      <div key={index} className="mt-2">
-                        <p>{section.content}</p>
-                        {section.photo1_url && (
-                          <img
-                            src={`${process.env.NEXT_PUBLIC_API_URL}${section.photo1_url}`}
-                            alt={`Section ${index + 1} - Photo 1`}
-                            className="w-32 h-32 object-cover mt-1"
-                          />
-                        )}
-                        {section.photo2_url && (
-                          <img
-                            src={`${process.env.NEXT_PUBLIC_API_URL}${section.photo2_url}`}
-                            alt={`Section ${index + 1} - Photo 2`}
-                            className="w-32 h-32 object-cover mt-1"
-                          />
-                        )}
-                      </div>
-                    ))}
+                    {article.image_url && (
+                      <img
+                        src={`${process.env.NEXT_PUBLIC_API_URL}${article.image_url}`}
+                        alt={article.title}
+                        className="w-32 h-32 object-cover mt-2"
+                      />
+                    )}
                   </div>
                   <div className="flex space-x-2">
                     <button
