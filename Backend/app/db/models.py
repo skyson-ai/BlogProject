@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from app.db.database import Base
 from datetime import datetime
 
+#modèle pour User
 class User(Base):
     __tablename__ = "users"
 
@@ -11,7 +12,8 @@ class User(Base):
     hashed_password = Column(String)
     role = Column(String, default="user")
     articles = relationship("Article", back_populates="author")
-
+    
+#modèle pour Article
 class Article(Base):
     __tablename__ = "articles"
 
@@ -24,7 +26,7 @@ class Article(Base):
     author_id = Column(Integer, ForeignKey("users.id"))
     author = relationship("User", back_populates="articles")
     
-# Nouveau modèle pour ContactMessage
+#modèle pour ContactMessage
 class ContactMessage(Base):
     __tablename__ = "contact_messages"
 
