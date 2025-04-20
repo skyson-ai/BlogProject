@@ -47,7 +47,7 @@ def get_contact_messages(db: Session = Depends(get_db), current_user: User = Dep
             "name": message.name,
             "email": message.email,
             "message": message.message,
-            "created_at": message.created_at.isoformat()  # Convertir datetime en str
+            "created_at": message.created_at.isoformat()
         }
         for message in messages
     ]
