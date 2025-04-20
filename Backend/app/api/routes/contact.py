@@ -40,6 +40,7 @@ def get_contact_messages(db: Session = Depends(get_db), current_user: User = Dep
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Non autorisé")
     messages = db.query(ContactMessage).all()
+    
     # Convertir created_at en chaîne pour chaque message
     return [
         {
