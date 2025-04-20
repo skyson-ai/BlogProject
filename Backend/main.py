@@ -33,7 +33,6 @@ app.include_router(contact.router, prefix="/api", tags=["contact"])
 @app.get("/")
 def read_root():
     return {"message": "Welcome to Voix Indélébiles API"}
-
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8001))  
     uvicorn.run(app, host="0.0.0.0", port=port)
