@@ -40,7 +40,7 @@ export default function Header() {
         <div className="flex items-center">
           <Link href="/" className={`text-4xl font-bold ${playfair.variable} flex items-center`}>
             <Image
-              src="/logo.png"
+              src="/new_logo.jpg"
               width={120} // Agrandi à 120px
               height={120} // Agrandi à 120px
               alt="Voix Indélébiles Logo"
