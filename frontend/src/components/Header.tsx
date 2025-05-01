@@ -6,7 +6,7 @@ import Image from "next/image";
 import { Playfair_Display } from "next/font/google";
 import { FaXTwitter } from "react-icons/fa6";
 import { useState } from "react";
-import { FaBars, FaTimes } from "react-icons/fa"; // Icônes pour le menu hamburger
+import { FaBars, FaTimes } from "react-icons/fa"; 
 
 // Charger la police Playfair Display
 const playfair = Playfair_Display({
@@ -16,10 +16,10 @@ const playfair = Playfair_Display({
 });
 
 // Définir une couleur orange personnalisée dans le scope
-const orangeCustom = "#F28C38"; // Orange personnalisé, ajustable
+const orangeCustom = "#F28C38"; 
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false); // État pour gérer l'ouverture/fermeture du menu
+  const [isOpen, setIsOpen] = useState(false); 
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -41,15 +41,15 @@ export default function Header() {
           <Link href="/" className={`text-4xl font-bold ${playfair.variable} flex items-center`}>
             <Image
               src="/new_logo.jpg"
-              width={120} // Agrandi à 120px
-              height={120} // Agrandi à 120px
+              width={120} 
+              height={120} 
               alt="Voix Indélébiles Logo"
-              className="mr-3" // Plus de marge pour l'espace
+              className="mr-3"
             />
           </Link>
         </div>
 
-        {/* Icône hamburger (visible sur mobile) */}
+     
         <div className="md:hidden">
           <button onClick={toggleMenu} aria-label="Toggle menu">
             {isOpen ? (
@@ -136,7 +136,7 @@ export default function Header() {
           <Link
             href="/"
             className="text-2xl hover:border-b-2 hover:border-orange-500 transition-all duration-200"
-            onClick={() => setIsOpen(false)} // Ferme le menu après un clic sur mobile
+            onClick={() => setIsOpen(false)} 
           >
             Accueil
           </Link>
