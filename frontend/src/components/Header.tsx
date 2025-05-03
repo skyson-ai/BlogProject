@@ -8,14 +8,14 @@ import { FaXTwitter } from "react-icons/fa6";
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa"; 
 
-// Charger la police Playfair Display
+
 const playfair = Playfair_Display({
   subsets: ["latin"],
   weight: ["700"],
   variable: "--font-playfair",
 });
 
-// Définir une couleur orange personnalisée dans le scope
+
 const orangeCustom = "#F28C38"; 
 
 export default function Header() {
@@ -27,7 +27,6 @@ export default function Header() {
 
   return (
     <>
-      {/* Overlay pour bloquer le scroll en arrière-plan sur mobile */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-5 md:hidden"
@@ -36,7 +35,6 @@ export default function Header() {
       )}
 
       <nav className="flex items-center justify-between p-6 border-b relative z-20 bg-white">
-        {/* Logo à gauche */}
         <div className="flex items-center">
           <Link href="/" className={`text-4xl font-bold ${playfair.variable} flex items-center`}>
             <Image
@@ -59,8 +57,6 @@ export default function Header() {
             )}
           </button>
         </div>
-
-        {/* Liens centrés et icônes sociales à droite (visible sur desktop) */}
         <div className="hidden md:flex items-center justify-center flex-1">
           {/* Liens centrés */}
           <div className="flex space-x-10">
@@ -90,7 +86,6 @@ export default function Header() {
             </Link>
           </div>
         </div>
-
         {/* Icônes sociales à droite (visible sur desktop) */}
         <div className="hidden md:flex space-x-4">
           <a
@@ -114,7 +109,7 @@ export default function Header() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
-          >
+          > 
             <FaInstagram className="text-2xl hover:text-gray-500 transition-colors" />
           </a>
         </div>
