@@ -5,8 +5,8 @@ const HeroSection = () => {
     <section className="bg-gray-100">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Texte à gauche */}
-          <div className="animate-text-delay lg:pr-16"> {/* Ajout de padding à droite pour rapprocher le texte de l'image */}
+         
+          <div className="animate-text-delay lg:pr-16"> 
             <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
             Bienvenue sur Voix Indélébiles, 
             </h1>
@@ -15,10 +15,10 @@ const HeroSection = () => {
             </p>
           </div>
 
-          {/* Image à droite */}
-          <div className="animate-image relative lg:-ml-16"> {/* Décalage à gauche pour chevauchement */}
+      
+          <div className="animate-image relative lg:-ml-16"> 
             <Image
-              src="/justice.jpg"
+              src="/images/justice.jpg"
               alt="Hero Image"
               width={500}
               height={400}
