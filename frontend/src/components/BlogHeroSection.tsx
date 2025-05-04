@@ -18,7 +18,7 @@ const HeroSection = () => {
       
           <div className="animate-image relative lg:-ml-16"> 
             <Image
-              src="/images/justice.jpg"
+              src="/images/Justice.jpg"
               alt="Hero Image"
               width={500}
               height={400}
