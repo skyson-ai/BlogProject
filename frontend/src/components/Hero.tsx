@@ -10,7 +10,7 @@ const Hero = () => {
             {/* Image */}
             <div className="w-full lg:w-auto">
               <Image
-                src="/proprietaire.jpg" // Remplace par ton image
+                src="/eric.jpg" // Remplace par ton image
                 alt="Edith Brou Bleu"
                 width={300} // Ajuste selon la taille souhaitée
                 height={400} // Ajuste selon la taille souhaitée
