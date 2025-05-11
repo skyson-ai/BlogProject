@@ -28,25 +28,25 @@ async def create_article(
     title: str = Form(...),
     content: str = Form(...),
     category: str = Form(...),
-    # image: UploadFile = File(...),
+    image: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Non autorisé")
     
-    # image_filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{image.filename}"
-    # image_path = os.path.join("uploads", image_filename)
-    # os.makedirs("uploads", exist_ok=True)
-    # with open(image_path, "wb") as f:
-    #     image_data = await image.read()
-    #     f.write(image_data)
+    image_filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{image.filename}"
+    image_path = os.path.join("uploads", image_filename)
+    os.makedirs("uploads", exist_ok=True)
+    with open(image_path, "wb") as f:
+        image_data = await image.read()
+        f.write(image_data)
 
     article = Article(
         title=title,
         content=content,  
         category=category,
-        # image_url=f"/uploads/{image_filename}",
+        image_url=f"/uploads/{image_filename}",
         author_id=current_user.id
     )
     db.add(article)
@@ -61,7 +61,7 @@ async def update_article(
     title: str = Form(...),
     content: str = Form(...),
     category: str = Form(...),
-    # image: UploadFile = File(None),
+    image: UploadFile = File(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -75,17 +75,17 @@ async def update_article(
     article.content = content  
     article.category = category
 
-    # if image:
-    #     if article.image_url:
-    #         old_image_path = article.image_url.replace("/uploads/", "uploads/")
-    #         if os.path.exists(old_image_path):
-    #             os.remove(old_image_path)
-    #     image_filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{image.filename}"
-    #     image_path = os.path.join("uploads", image_filename)
-    #     with open(image_path, "wb") as f:
-    #         image_data = await image.read()  
-    #         f.write(image_data)
-    #     article.image_url = f"/uploads/{image_filename}"
+    if image:
+        if article.image_url:
+            old_image_path = article.image_url.replace("/uploads/", "uploads/")
+            if os.path.exists(old_image_path):
+                os.remove(old_image_path)
+        image_filename = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{image.filename}"
+        image_path = os.path.join("uploads", image_filename)
+        with open(image_path, "wb") as f:
+            image_data = await image.read()  
+            f.write(image_data)
+        article.image_url = f"/uploads/{image_filename}"
 
     db.commit()
     db.refresh(article)
