@@ -1,10 +1,19 @@
-# Blog Project
+<h1 align="center">Blog Project</h1>
 
-A full-stack blog application with multi-language support and powerful backend services.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white" alt="C++">
+  <img src="https://img.shields.io/badge/C-A8B9CC?style=for-the-badge&logo=c&logoColor=white" alt="C">
+  <img src="https://img.shields.io/badge/PowerShell-5391FE?style=for-the-badge&logo=powershell&logoColor=white" alt="PowerShell">
+  <img src="https://img.shields.io/badge/Cython-FED050?style=for-the-badge&logo=cython&logoColor=black" alt="Cython">
+</p>
 
-## Overview
+<p align="center">
+  <em>A full-stack blog application with multi-language support and backend services</em>
+</p>
 
-A comprehensive blog platform featuring a Python-powered backend with multi-language support, combining performance and flexibility for content management.
+---
 
 ## Features
 
@@ -12,17 +21,7 @@ A comprehensive blog platform featuring a Python-powered backend with multi-lang
 - Backend API services
 - Content management
 - User authentication
-- Responsive frontend
 - Cross-platform compatibility
-
-## Tech Stack
-
-- **Python** — Backend logic & API
-- **TypeScript** — Frontend components
-- **C++** — Performance-critical modules
-- **PowerShell** — Windows automation scripts
-- **Cython** — Python/C compilation
-- **HTML/CSS** — Templating & styling
 
 ## Getting Started
 
@@ -31,7 +30,7 @@ git clone https://github.com/skyson-ai/BlogProject.git
 cd BlogProject
 ```
 
-Follow the setup instructions in the respective subdirectories.
+Follow setup instructions in the respective subdirectories.
 
 ## Author
 
